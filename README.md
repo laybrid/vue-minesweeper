@@ -1,5 +1,5 @@
-# vue_minesweeper
-
+# Vue Basic Configuration 
+tailwindcss heroIcon DarkMode....
 ## Project setup
 ```
 npm install

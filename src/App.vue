@@ -1,30 +1,26 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <nav class="fixed top-0 right-5">
+    <button @click="changeMode" class="hover:text-[#0d9488]">
+      <SunIcon class="size-6" v-show="modeState"></SunIcon>
+      <MoonIcon class="size-6" v-show="!modeState"></MoonIcon>
+    </button>
+    <a href="#" class="hover:text-[#0d9488]">GitHub</a>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
+<script setup lang="ts">
+import { useDarkMode } from './assets/utils/useDarkMode'
+import { MoonIcon, SunIcon,ArrowDownCircleIcon } from '@heroicons/vue/24/outline'
+const { modeState, changeMode } = useDarkMode()
+</script>
+
 <style>
+html,
+body,
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 </style>
