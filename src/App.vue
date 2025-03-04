@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { useDarkMode } from './assets/utils/useDarkMode'
-import { MoonIcon, SunIcon,ArrowDownCircleIcon } from '@heroicons/vue/24/outline'
+import { MoonIcon, SunIcon} from '@heroicons/vue/24/outline'
 const { modeState, changeMode } = useDarkMode()
 </script>
 
