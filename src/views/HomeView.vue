@@ -17,19 +17,9 @@
     </div>
     <div class="p-5">
       <div v-for="row, y in state" :key="y" class="flex justify-center gap-0.5 mb-0.5">
-        <button v-for="item, x in row" :key="x" @click="onClick(item)" @contextmenu.prevent="onRightClick(item)"
-          :class="getBlockClass(item)"
-          class="flex justify-center items-center min-w-8 min-h-8 border border-gray-400/10">
-          <template v-if="item.revealed || dev">
-            <div v-if="item.mine">
-              <BoltIcon class=" text-[#374151] dark:text-white size-5"></BoltIcon>
-            </div>
-            <div v-else>{{ item.adjacentMines }}</div>
-          </template>
-          <template v-else-if="(!item.revealed && item.flagged)">
-            <FlagIcon class=" text-[#f87171]  size-5"></FlagIcon>
-          </template>
-        </button>
+        <MineBlock 
+        :block="item"
+         v-for="item, x in row" :key="x" @click="onClick(item)" @contextmenu.prevent="onRightClick(item)"></MineBlock>
       </div>
     </div>
   </div>
@@ -37,16 +27,11 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
+import MineBlock from '@/components/MineBlock.vue';
 import { ClockIcon } from '@heroicons/vue/24/outline'
-import { BoltIcon, FlagIcon } from '@heroicons/vue/24/solid'
-interface BlockState {
-  x: number,
-  y: number,
-  revealed?: boolean,
-  mine?: boolean,
-  flagged?: boolean,
-  adjacentMines: number
-}
+import { BoltIcon} from '@heroicons/vue/24/solid'
+import { BlockState } from '@/types';
+
 const WIDTH = 6
 const HEIGHT = 6
 const state = reactive(Array.from({ length: HEIGHT }, (_, y) => Array.from({ length: WIDTH }, (_, x): BlockState => ({ x, y, adjacentMines: 0, revealed: false,flagged:false }))))
@@ -61,20 +46,9 @@ const dirction = [
   [-1, 0],
   [-1, -1],
 ]
-// 添加数字样式
-const numberColors = [
-  'text-transparent',
-  'text-blue-500',
-  'text-green-500',
-  'text-yellow-500',
-  'text-orange-500',
-  'text-purple-500',
-  'text-pink-500',
-  'text-teal-500',
-]
 
-// 开发者模式和点击后再生成数据  这样避免第一次点就是雷
-const dev = false
+
+// 点击后再生成数据  这样避免第一次点就是雷
 let minesgenerated = false
 function onClick(block: BlockState) {
   if (!minesgenerated) {
@@ -131,13 +105,7 @@ function searchBlock(block: BlockState) {
     .filter(Boolean) as BlockState[]
 }
 
-// 添加block的样式
-function getBlockClass(block: BlockState) {
-  if (block.revealed == false) {
-    return 'bg-gray-500/10 hover:bg-gray-500/20'
-  }
-  return block.mine ? 'bg-red-400' : numberColors[block.adjacentMines as number]
-}
+
 // 自动化掀开0
 function expendZero(block: BlockState) {
   if (block.adjacentMines || block.mine) {
