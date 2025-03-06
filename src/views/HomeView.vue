@@ -2,9 +2,10 @@
   <div class="py-10 text-center">
     <p>Minesweeper</p>
     <div class="flex justify-center py-4">
-      <button 
-      class="py-1 px-4 mx-0.5 bg-[#0d9488] text-white rounded hover:bg-[#0f766e]"
-      v-for="(item,index) in setting" :key=index>{{ item }}</button>
+      <button class="py-1 px-4 mx-0.5 bg-[#0d9488] text-white rounded hover:bg-[#0f766e]"
+        v-for="(item, index) in play.setting" :key=index
+        @click="item.method(play)">{{ item.title }}
+      </button>
     </div>
     <div class="flex justify-center gap-10">
       <div class="flex gap-1 items-center">
@@ -17,34 +18,23 @@
       </div>
     </div>
     <div class="p-5">
-      <div class="flex justify-center gap-0.5">
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
-        <button class="min-w-8 min-h-8 border-0.5 bg-gray-500/10 hover:bg-gray-500/20"></button>
+      <div v-for="row, y in state" :key="y" class="flex justify-center gap-0.5 mb-0.5">
+        <MineBlock 
+        :block="item"
+         v-for="item, x in row" :key="x" @click="play.onClick(item)" @contextmenu.prevent="play.onRightClick(item)"></MineBlock>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { ClockIcon, BoltIcon} from '@heroicons/vue/24/outline'
-type boxType = {
-  value:number,
-  tag:boolean,
-  cover:boolean
-}
-const box = ref([])
-const setting  = ref(['New Game','Easy','Medium','Hard']) 
-// function init() {
-  
-// }
+import MineBlock from '@/components/MineBlock.vue';
+import { ClockIcon } from '@heroicons/vue/24/outline'
+import { BoltIcon} from '@heroicons/vue/24/solid'
+import { GamePlay } from '@/assets/utils/logic';
+
+const  play = new GamePlay(9,9)
+const state = play.state
 </script>
 
 <style></style>
