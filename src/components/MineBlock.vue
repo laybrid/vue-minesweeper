@@ -1,6 +1,7 @@
 <template>
     <button 
-        :class="getBlockClass(block)" class="flex justify-center blocks-center min-w-8 min-h-8 border border-gray-400/10">
+        :class="getBlockClass(block)" 
+        class="flex justify-center items-center min-w-8 min-h-8 border border-gray-400/10">
         <template v-if="block.revealed || dev">
             <div v-if="block.mine">
                 <BoltIcon class=" text-[#374151] dark:text-white size-5"></BoltIcon>
