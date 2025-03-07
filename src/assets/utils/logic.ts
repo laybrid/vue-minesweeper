@@ -32,13 +32,14 @@ export class GamePlay {
         method: this.hard
     }]
 
-    constructor(public width: number, public height: number) {
-        this.reset(width, height)
+    constructor(public width: number, public height: number, public mines:number) {
+        this.reset(width, height,mines)
     }
-    reset(w: number, h: number) {
+    reset(w: number, h: number,mines:number) {
         this.gameState.value = 'play'
         this.width = w
         this.height = h
+        this.mines = mines
         this.minesgenerated = false
         this.state.value = Array.from({ length: this.height }, (_, y) => Array.from({ length: this.width }, (_, x): BlockState => ({ x, y, adjacentMines: 0, revealed: false, flagged: false })))
     }
@@ -69,16 +70,24 @@ export class GamePlay {
     }
     // 生成雷
     generateMines(state: BlockState[][], initblock: BlockState) {
-        for (const row of state) {
-            for (const block of row) {
-                if (Math.abs(initblock.x - block.x) <= 1) {
-                    continue
-                }
-                if (Math.abs(initblock.y - block.y) <= 1) {
-                    continue
-                }
-                block.mine = Math.random() < 0.2
+        for(let i = 0; i < this.mines;i++) {
+            const x = Math.round(Math.random() * (this.width-1))
+            const y = Math.round(Math.random() * (this.height-1))
+            const block = state[y][x]
+            if (Math.abs(initblock.x - block.x) <= 1) {
+                i--
+                continue
             }
+            if (Math.abs(initblock.y - block.y) <= 1) {
+                i--
+                continue
+            } 
+            if(block.mine) {
+                i-- 
+                continue
+            }
+            state[y][x].mine = true
+
         }
         this.updateNumber(state)
     }
@@ -126,7 +135,6 @@ export class GamePlay {
         const isWin = blocks.every((block) => (!block.mine && block.revealed) || block.mine)
         if (isWin) {
             this.gameState.value = 'won'
-            alert('win!!')
         }
     }
 
@@ -141,18 +149,15 @@ export class GamePlay {
     }
     // 头部四个按钮的逻辑
     newGame(play: GamePlay) {
-        play.reset(9, 9)
+        play.reset(9, 9,10)
     }
     easy(play: GamePlay) {
-        play.reset(9, 9)
-        console.log('easy')
+        play.reset(9, 9,10)
     }
     medium(play: GamePlay) {
-        play.reset(16, 16)
-        console.log('Medium')
+        play.reset(16, 16,40)
     }
     hard(play: GamePlay) {
-        play.reset(16, 30)
-        console.log('hard')
+        play.reset(16, 30,99)
     }
 }

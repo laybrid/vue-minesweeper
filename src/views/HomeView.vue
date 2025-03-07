@@ -8,13 +8,13 @@
       </button>
     </div>
     <div class="flex justify-center gap-10">
-      <div class="flex gap-1 items-center">
+      <!-- <div class="flex gap-1 items-center">
         <ClockIcon class="text-[#374151] dark:text-white size-7"></ClockIcon>
         <div class="text-2xl font-mono">0</div>
-      </div>
+      </div> -->
       <div class="flex gap-1 items-center">
         <BoltIcon class=" text-[#374151] dark:text-white size-7"></BoltIcon>
-        <div class="text-2xl font-mono">10</div>
+        <div class="text-2xl font-mono">{{ play.mines }}</div>
       </div>
     </div>
     <div class="p-5">
@@ -24,16 +24,18 @@
          v-for="item, x in row" :key="x" @click="play.onClick(item)" @contextmenu.prevent="play.onRightClick(item)"></MineBlock>
       </div>
     </div>
+    <ConfettiAnimation :passed="play.gameState.value === 'won'"></ConfettiAnimation>
   </div>
 </template>
 
 <script setup lang="ts">
 import MineBlock from '@/components/MineBlock.vue';
+import ConfettiAnimation from '@/components/ConfettiAnimation.vue';
 import { ClockIcon } from '@heroicons/vue/24/outline'
 import { BoltIcon} from '@heroicons/vue/24/solid'
 import { GamePlay } from '@/assets/utils/logic';
 
-const  play = new GamePlay(9,9)
+const  play = new GamePlay(9,9,8)
 const state = play.state
 </script>
 
